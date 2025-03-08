@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online - Sección 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="Styles.css">
+
+</head>
+<body class="bg-green-50">
+    <!-- Encabezado -->
+    <header class="bg-green-800 text-white p-4 flex justify-between items-center shadow-md">
+        <h1 class="text-2xl font-bold">Tienda Online</h1>
+        <div class="relative">
+            <button onclick="window.location.href='seccion3.html'" class="text-2xl">🛒</button>
+            <span id="cart-counter" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">0</span>
+        </div>
+    </header>
+    
+    <div class="flex">
+        <!-- Barra lateral -->
+        <aside class="bg-green-200 p-8 shadow-md">
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='seccion1.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">Inicio</button>
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='seccion2.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">Catálogo de Productos</button>
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='seccion4.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">contacto</button>
+        </aside>      
+        
+        <!-- Contenido principal -->
+        <main class="w-4/5 p-4">
+            <h2 class="text-xl font-bold mb-4">Frutas Exóticas</h2>
+            <div class="grid grid-cols-4 gap-4" id="exotic-products"></div>
+
+            <h2 class="text-xl font-bold mt-6 mb-4">Ofertas Especiales</h2>
+            <div class="grid grid-cols-4 gap-4" id="offer-products"></div>
+        </main>
+    </div>
+
+    <!-- Modal de descripción -->
+    <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-1/3 text-center">
+            <img id="modal-image" class="w-full h-40 object-cover mb-4" src="" alt="">
+            <h3 id="modal-title" class="text-xl font-bold"></h3>
+            <p id="modal-description" class="mt-2"></p>
+            <button onclick="closeModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Cerrar</button>
+        </div>
+    </div>
+    
+    <script>
+        const exoticProducts = [
+    { name: "Pitahaya", price: 15000, image: "imagenes/pitahaya.jpg", description: "Fruta tropical dulce y jugosa." },
+    { name: "Mangostino", price: 18000, image: "imagenes/mangostino.jpg", description: "Conocida como la reina de las frutas." },
+    { name: "Rambután", price: 16000, image: "imagenes/rambutan.jpg", description: "Similar al lichi, con un sabor dulce." },
+    { name: "Maracuyá", price: 10000, image: "imagenes/maracuya.jpg", description: "Fruta con un sabor ácido y refrescante." },
+    { name: "Noni", price: 20000, image: "imagenes/noni.jpg", description: "Fruta con propiedades medicinales y alto contenido antioxidante." },
+    { name: "Guayusa", price: 12000, image: "imagenes/guayusa.jpg", description: "Hoja amazónica con efectos energizantes, ideal para infusiones." },
+    { name: "Açai", price: 22000, image: "imagenes/acai.jpg", description: "Superfruta rica en antioxidantes, popular en batidos y bowls saludables." },
+    { name: "Lulo", price: 9000, image: "imagenes/lulo.jpg", description: "Fruta cítrica y refrescante, perfecta para jugos naturales." },
+];
+
+const offerProducts = [
+    { name: "Aguacate", price: 12000, image: "imagenes/aguacate.jpg", discount: "10%", description: "Rico en grasas saludables." },
+    { name: "Papaya", price: 8000, image: "imagenes/papaya.jpg", discount: "15%", description: "Dulce y excelente para la digestión." },
+    { name: "Sandía", price: 7000, image: "imagenes/sandia.jpg", discount: "20%", description: "Refrescante y jugosa en días calurosos." },
+    { name: "Mora", price: 6000, image: "imagenes/mora.jpg", discount: "12%", description: "Fruta rica en antioxidantes y fibra." },
+    { name: "Tomate de árbol", price: 5000, image: "imagenes/tomate_arbol.jpg", discount: "18%", description: "Ideal para jugos y postres, con alto contenido en vitamina A." },
+    { name: "Melón", price: 6500, image: "imagenes/melon.jpg", discount: "10%", description: "Dulce y refrescante, perfecto para ensaladas de frutas." },
+    { name: "Durazno", price: 7500, image: "imagenes/durazno.jpg", discount: "15%", description: "Fruta jugosa y aromática, con alto contenido de fibra." }
+];
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+        updateCartCounter();
+
+        function renderProducts() {
+            const exoticList = document.getElementById("exotic-products");
+            const offerList = document.getElementById("offer-products");
+            exoticList.innerHTML = "";
+            offerList.innerHTML = "";
+
+            exoticProducts.forEach((product, index) => {
+                exoticList.innerHTML += createProductHTML(product, `exotic-${index}`);
+            });
+
+            offerProducts.forEach((product, index) => {
+                offerList.innerHTML += createProductHTML(product, `offer-${index}`, true);
+            });
+        }
+        
+        function createProductHTML(product, id, isOffer = false) {
+    return `
+        <div class="bg-white p-4 rounded shadow-md flex flex-col items-center relative">
+            ${isOffer ? `<span class='bg-yellow-500 text-white text-xs px-2 py-1 rounded-full absolute top-2 left-2'>${product.discount} de descuento</span>` : ''}
+            <img src="${product.image}" alt="${product.name}" class="w-full h-32 object-cover cursor-pointer" onclick="showDescription('${id}')">
+            <p class="text-center mt-2 font-bold">${product.name}</p>
+            <p class="text-center">$${product.price}/kg</p>
+            <div class="flex justify-center items-center mt-2">
+                <button class="bg-gray-300 p-2 rounded" onclick="decrease('${id}')">-</button>
+                <span id="count-${id}" class="mx-2">${cart[id] || 0}</span>
+                <button class="bg-gray-300 p-2 rounded" onclick="increase('${id}')">+</button>
+            </div>
+        </div>
+    `;
+ }
+
+
+
+
+        function increase(id) {
+            cart[id] = (cart[id] || 0) + 1;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            document.getElementById(`count-${id}`).innerText = cart[id];
+            updateCartCounter();
+        }
+
+        function decrease(id) {
+            if (cart[id] > 0) {
+                cart[id]--;
+                if (cart[id] === 0) delete cart[id];
+                localStorage.setItem("cart", JSON.stringify(cart));
+                document.getElementById(`count-${id}`).innerText = cart[id] || 0;
+                updateCartCounter();
+            }
+        }
+
+        function updateCartCounter() {
+            const totalItems = Object.values(cart).reduce((sum, count) => sum + count, 0);
+            document.getElementById("cart-counter").innerText = totalItems;
+        }
+
+        function showDescription(id) {
+    const [type, index] = id.split('-'); // Separar el tipo y el índice
+
+    let product;
+    if (type === "exotic") {
+        product = exoticProducts[parseInt(index)]; // Buscar en frutas exóticas
+    } else if (type === "offer") {
+        product = offerProducts[parseInt(index)]; // Buscar en ofertas
+    }
+
+    if (product) {
+        document.getElementById("modal-title").innerText = product.name;
+        document.getElementById("modal-description").innerText = product.description;
+        document.getElementById("modal-image").src = product.image;
+        document.getElementById("product-modal").classList.remove("hidden");
+    }
+}
+
+
+        function closeModal() {
+            document.getElementById("product-modal").classList.add("hidden");
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
