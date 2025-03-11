@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto y Soporte</title>
+    <script src="https://cdn.tailwindcss.com"></script>    
+    <link rel="stylesheet" href="Styles.css">
+
+</head>
+<body class="bg-green-50">
+    <!-- Encabezado -->
+    <header class="bg-green-800 text-white p-4 flex justify-between items-center shadow-md">
+        <h1 class="text-2xl font-bold">Tienda Online</h1>
+        <div class="relative">
+            <button onclick="window.location.href='seccion3.html'" class="text-2xl">🛒</button>
+            <span id="cart-counter" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">0</span>
+        </div>
+    </header>
+    
+    <div class="flex">
+        <!-- Barra lateral -->
+        <aside class="bg-green-200 p-8 shadow-md">
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='index.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">Inicio</button>
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='seccion2.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">Catálogo de Productos</button>
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='seccion4.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">contacto</button>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="w-4/5 p-4">
+            <h2 class="text-2xl font-bold mb-4">Contacto y Soporte</h2>
+            
+            <!-- Preguntas Frecuentes -->
+            <section class="bg-white p-4 rounded shadow-md mb-4">
+                <h3 class="text-xl font-bold">Preguntas Frecuentes</h3>
+                <p><strong>¿Cómo comprar?</strong> - Selecciona un producto, agrégalo al carrito y configura el peso.</p>
+                <p><strong>¿Puedo modificar mi pedido?</strong> - Sí, antes de confirmar la compra.</p>
+                <p><strong>¿Puedo solicitar factura?</strong> - Sí, al finalizar tu compra encontrarás la opción para solicitar una factura.</p>
+            </section>
+            
+            <!-- Formulario de contacto -->
+            <section class="bg-white p-4 rounded shadow-md">
+                <h3 class="text-xl font-bold">Envíanos un mensaje</h3>
+                <form>
+                    <label class="block mt-2">Nombre:</label>
+                    <input type="text" class="w-full p-2 border rounded" placeholder="Tu nombre">
+                    
+                    <label class="block mt-2">Apellido:</label>
+                    <input type="text" class="w-full p-2 border rounded" placeholder="Tu apellido">
+                    
+                    <label class="block mt-2">Mensaje:</label>
+                    <textarea class="w-full p-2 border rounded" placeholder="Escribe tu mensaje"></textarea>
+                    
+                    <button type="submit" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Enviar</button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

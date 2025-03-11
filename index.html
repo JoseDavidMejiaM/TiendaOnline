@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>    
+   <link rel="stylesheet" href="Styles.css">
+</head>
+<body class="bg-green-50">
+    <!-- Encabezado -->
+    <header class="bg-green-800 text-white p-4 flex justify-between items-center shadow-md">
+        <h1 class="text-2xl font-bold">Tienda Online</h1>
+        <div class="relative">
+            <button onclick="window.location.href='seccion3.html'" class="text-2xl">🛒</button>
+            <span id="cart-counter" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">0</span>
+        </div>
+    </header>
+    
+    <div class="flex">
+        <!-- Barra lateral -->
+        <aside class="bg-green-200 p-8 shadow-md">
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='index.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">Inicio</button>
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='seccion2.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">Catálogo de Productos</button>
+            <h2 class="text-lg font-bold mb-8"></h2>
+            <button onclick="window.location.href='seccion4.html'" class="block w-full p-2 mb-2 bg-white rounded hover:bg-gray-300">contacto</button>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="w-4/5 p-4">
+            <!-- Sección Destacado -->
+            <h2 class="text-xl font-bold mb-4">Destacado</h2>
+            <div class="grid grid-cols-4 gap-4" id="product-list"></div>
+
+            <!-- Sección Nuevos Ingresos -->
+            <h2 class="text-xl font-bold mt-6 mb-4">Nuevos Ingresos</h2>
+            <div class="grid grid-cols-4 gap-4" id="new-products"></div>
+        </main>
+    </div>
+    
+    <!-- Modal de descripción -->
+    <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-amber-100 p-4 rounded shadow-md flex flex-col items-center relative">
+            <img id="modal-image" class="w-full h-40 object-cover mb-4" src="" alt="">
+            <h3 id="modal-title" class="text-xl font-bold"></h3>
+            <p id="modal-description" class="mt-2"></p>
+            <button onclick="closeModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Cerrar</button>
+        </div>
+    </div>
+    
+    <script>
+    
+    const products = [
+    { name: "Manzana", price: 5000, image: "imagenes/manzana.jpg", description: "La manzana es una fruta jugosa, crujiente y refrescante. Rica en fibra, vitamina C y antioxidantes, es ideal para consumir fresca, en jugos, postres o ensaladas. Su versatilidad la convierte en un ingrediente común en la cocina saludable." },
+    
+    { name: "Plátano", price: 4000, image: "imagenes/platano.jpg", description: "El plátano es una fruta dulce y cremosa, con alto contenido de potasio, magnesio y vitamina B6. Es una excelente fuente de energía, ideal para deportistas y un complemento nutritivo para batidos, cereales y postres." },
+    
+    { name: "Pera", price: 4500, image: "imagenes/pera.jpg", description: "Las peras son frutas de pulpa jugosa y sabor dulce. Aportan fibra, antioxidantes y agua, favoreciendo la hidratación y la digestión. Son perfectas para consumir frescas, en compotas, ensaladas o como ingrediente de repostería." },
+    
+    { name: "Naranja", price: 3500, image: "imagenes/naranja.jpg", description: "La naranja es un cítrico rico en vitamina C, esencial para fortalecer el sistema inmunológico. Su sabor dulce y ácido la hace ideal para jugos, ensaladas de frutas o como acompañamiento en platillos dulces y salados." },
+    
+    { name: "Uva", price: 9000, image: "imagenes/uva.jpg", description: "Las uvas son frutas pequeñas y dulces que contienen antioxidantes y resveratrol, conocidos por sus beneficios para la salud cardiovascular. Se pueden comer frescas, en jugos, ensaladas o ser utilizadas para hacer vinos y mermeladas." },
+    
+    { name: "Fresa", price: 12000, image: "imagenes/fresa.jpg", 
+      description: "Las fresas son frutas de color rojo vibrante con un sabor dulce y ligeramente ácido. Son ricas en vitamina C y antioxidantes, perfectas para consumir frescas, en batidos, postres o como decoración en platos gourmet." },
+
+    // **Nuevas verduras agregadas con descripciones completas**
+    
+    { name: "Acelga", price: 3000, image: "imagenes/acelga.jpg", description: "La acelga es una hortaliza de hojas verdes rica en hierro, calcio y vitaminas A, C y K. Se usa comúnmente en ensaladas, sopas y guisos, proporcionando un sabor suave y un alto valor nutricional." },
+    
+    { name: "Ajo", price: 8000, image: "imagenes/ajo.jpg", description: "El ajo es un ingrediente aromático con propiedades antibacterianas y antioxidantes. Se utiliza en la cocina para dar sabor a una gran variedad de platos y también se emplea en remedios naturales para fortalecer el sistema inmunológico." },
+    
+    { name: "Alcachofa", price: 7500, image: "imagenes/alcachofa.jpg", description: "La alcachofa es una hortaliza rica en fibra y antioxidantes, ideal para mejorar la digestión y el metabolismo. Se puede consumir hervida, asada o en ensaladas, acompañada de salsas y aderezos." },
+    
+    { name: "Alcaparra", price: 10000, image: "imagenes/alcaparra.jpg", description: "Las alcaparras son pequeños brotes encurtidos con un sabor intenso y ligeramente ácido. Se utilizan en la gastronomía mediterránea para realzar el sabor de salsas, ensaladas y platos de pescado." },
+    
+    { name: "Apio", price: 3500, image: "imagenes/apio.jpg", description: "El apio es una verdura crujiente y refrescante con propiedades diuréticas y depurativas. Es bajo en calorías y rico en fibra, ideal para jugos detox, ensaladas y como base para caldos y sopas." },
+    
+    { name: "Batata", price: 4500, image: "imagenes/batata.jpg", description: "La batata, también llamada camote, es un tubérculo de sabor dulce y alto contenido de fibra. Rica en betacarotenos y vitamina A, es una excelente opción para preparaciones horneadas, purés y postres saludables." },
+    
+    { name: "Berenjena", price: 5000, image: "imagenes/berenjena.jpg", description: "La berenjena es una hortaliza versátil de textura carnosa, utilizada en platillos como la moussaka y la parmigiana. Es baja en calorías y rica en antioxidantes, ideal para asar, hornear o preparar en guisos." },
+    
+    { name: "Berros", price: 3200, image: "imagenes/berros.jpg", description: "Los berros son una hoja verde con un sabor ligeramente picante y alto contenido de hierro y antioxidantes. Son perfectos para ensaladas, sopas y jugos verdes debido a sus beneficios para la circulación y la salud ósea." }
+];
+
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+        updateCartCounter();
+
+        function renderProducts() {
+            const productList = document.getElementById("product-list");
+            const newProducts = document.getElementById("new-products");
+            productList.innerHTML = "";
+            newProducts.innerHTML = "";
+
+            products.forEach((product, id) => {
+                const productHTML = `
+                <div class="bg-amber-100 p-4 rounded shadow-md flex flex-col items-center relative">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-32 object-cover cursor-pointer" onclick="showDescription(${id})">
+                        <p class="text-center mt-2 font-bold">${product.name}</p>
+                        <p class="text-center">$${product.price}/kg</p>
+                        <div class="flex justify-center items-center mt-2">
+                            <button class="bg-gray-300 p-2 rounded" onclick="decrease(${id})">-</button>
+                            <span id="count-${id}" class="mx-2">${cart[id] || 0}</span>
+                            <button class="bg-gray-300 p-2 rounded" onclick="increase(${id})">+</button>
+                        </div>
+                    </div>
+                `;
+                
+                if (id < 6) {
+                    productList.innerHTML += productHTML;
+                } else {
+                    newProducts.innerHTML += productHTML;
+                }
+            });
+        }
+
+        function increase(id) {
+            cart[id] = (cart[id] || 0) + 1;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            document.getElementById(`count-${id}`).innerText = cart[id];
+            updateCartCounter();
+        }
+        
+        function decrease(id) {
+            if (cart[id] > 0) {
+                cart[id]--;
+                if (cart[id] === 0) delete cart[id];
+                localStorage.setItem("cart", JSON.stringify(cart));
+                document.getElementById(`count-${id}`).innerText = cart[id] || 0;
+                updateCartCounter();
+            }
+        }
+
+        function updateCartCounter() {
+            const totalItems = Object.values(cart).reduce((sum, count) => sum + count, 0);
+            document.getElementById("cart-counter").innerText = totalItems;
+        }
+
+        function showDescription(index) {
+            document.getElementById("modal-title").innerText = products[index].name;
+            document.getElementById("modal-description").innerText = products[index].description;
+            document.getElementById("modal-image").src = products[index].image;
+            document.getElementById("product-modal").classList.remove("hidden");
+        }
+
+        function closeModal() {
+            document.getElementById("product-modal").classList.add("hidden");
+        }
+
+        renderProducts();
+    </script>
+</body>
+<script src="carrito.js" defer></script>
+
+</html>
