@@ -46,10 +46,10 @@
         <!-- Contenido principal -->
         <main class="w-4/5 p-4 m-4 content-overlay">
             <!-- Sección de bienvenida -->
-            <section class="p-6 rounded mb-6 text-center">
-                <h2 class="text-3xl font-bold text-green-800">Nuestro Catálogo Completo</h2>
+            <section id="welcome-section" class="p-6 rounded mb-6 text-center">
+                <h2 class="text-3xl font-bold text-green-800">Bienvenidos a Tienda Esmeralda</h2>
                 <p class="text-gray-700 mt-2">
-                    En <strong>Tienda Esmeralda</strong> encontrarás las frutas y verduras más exóticas y frescas, cultivadas con amor y respeto por la naturaleza.
+                    En <strong>Tienda Esmeralda</strong> encontrarás frutas y verduras frescas, cultivadas con amor y respeto por la naturaleza. Te ofrecemos una experiencia de compra cómoda y confiable, con productos orgánicos de alta calidad.
                 </p>
             </section>
             
@@ -61,23 +61,23 @@
             </div>
 
             <!-- Secciones de productos -->
-            <section class="mb-6">
+            <section id="exotic-fruits-section" class="mb-6">
                 <h2 class="text-2xl font-bold text-green-800 mb-4">🍍 Frutas Exóticas</h2>
                 <p class="text-gray-700 mb-3">Descubre nuestra selección premium de frutas tropicales importadas directamente de sus países de origen.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="exotic-fruits"></div>
             </section>
 
-            <hr class="border-t-2 border-green-300 my-6">
+            <hr id="divider-1" class="border-t-2 border-green-300 my-6">
 
-            <section class="mb-6">
+            <section id="exotic-vegetables-section" class="mb-6">
                 <h2 class="text-2xl font-bold text-green-800 mb-4">🥬 Verduras Exóticas</h2>
                 <p class="text-gray-700 mb-3">Explora nuestras exclusivas variedades de verduras, cultivadas con métodos orgánicos y sostenibles.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="exotic-vegetables"></div>
             </section>
 
-            <hr class="border-t-2 border-green-300 my-6">
+            <hr id="divider-2" class="border-t-2 border-green-300 my-6">
 
-            <section class="mb-6">
+            <section id="offer-products-section" class="mb-6">
                 <h2 class="text-2xl font-bold text-orange-600 mb-4">🔥 Ofertas Especiales</h2>
                 <p class="text-gray-700 mb-3">Aprovecha nuestros descuentos en productos seleccionados. ¡Ofertas por tiempo limitado!</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="offer-products"></div>
@@ -108,13 +108,14 @@
             { id: "21", name: "Lulo", categoria: "Frutas", pricePerKg: 9000, pricePerLb: Math.round(9000 / 2.20462), image: "imagenes/lulo.jpg", description: "Fruta cítrica y refrescante, perfecta para jugos naturales." }
         ];
         
-       // Ofertas
-       const offerProducts = [
+        // Ofertas
+        const offerProducts = [
             { id: "22", name: "Aguacate Hass", categoria: "Frutas", pricePerKg: 12000, pricePerLb: Math.round(12000 / 2.20462), image: "imagenes/aguacate.jpg", discount: "10%", description: "Rico en grasas saludables y vitamina E. Perfecto para ensaladas y guacamole." },
             { id: "23", name: "Papaya", categoria: "Frutas", pricePerKg: 8000, pricePerLb: Math.round(8000 / 2.20462), image: "imagenes/papaya.jpg", discount: "15%", description: "Dulce y excelente para la digestión. Alta en enzimas digestivas y vitamina C." },
             { id: "24", name: "Sandía", categoria: "Frutas", pricePerKg: 7000, pricePerLb: Math.round(7000 / 2.20462), image: "imagenes/sandia.jpg", discount: "20%", description: "Refrescante y jugosa en días calurosos. Contiene licopeno y es baja en calorías." },
             { id: "25", name: "Mora orgánica", categoria: "Frutas", pricePerKg: 6000, pricePerLb: Math.round(6000 / 2.20462), image: "imagenes/mora.jpg", discount: "12%", description: "Fruta rica en antioxidantes y fibra. Cultivada sin pesticidas ni químicos." }
         ];
+        
         // Nuevas verduras exóticas
         const exoticVegetables = [
             { id: "26", name: "Col rizada (Kale)", categoria: "Verduras", pricePerKg: 8500, pricePerLb: Math.round(8500 / 2.20462), image: "imagenes/kale.jpg", description: "Superalimento verde con alto contenido de vitaminas A, K y C. Ideal para ensaladas y jugos detox." },
@@ -129,8 +130,6 @@
             { id: "35", name: "Hojas de mostaza", categoria: "Verduras", pricePerKg: 6800, pricePerLb: Math.round(6800 / 2.20462), image: "imagenes/hojas-mostaza.jpg", description: "Hojas picantes ricas en vitamina K y antioxidantes. Ideal para salteados con ajo o ensaladas." }
         ];
 
- 
-
         let cart = JSON.parse(localStorage.getItem("cart")) || {};
         let unit = localStorage.getItem("unit") || "kg";
 
@@ -142,23 +141,30 @@
         });
 
         function showCategory(category) {
-            // Mostrar/ocultar secciones según la categoría seleccionada
-            document.getElementById('exotic-fruits').style.display = 
-                (category === 'Frutas' || category === 'all') ? 'grid' : 'none';
-            document.getElementById('exotic-vegetables').style.display = 
-                (category === 'Verduras' || category === 'all') ? 'grid' : 'none';
-            document.getElementById('offer-products').style.display = 
-                (category === 'Frutas' || category === 'all') ? 'grid' : 'none';
+            // La sección de bienvenida siempre visible
+            document.getElementById('welcome-section').style.display = 'block';
             
-            // Mostrar los títulos de sección según corresponda
-            document.querySelectorAll('section').forEach(section => {
-                section.style.display = 
-                    (category === 'all' || 
-                     (category === 'Frutas' && section.querySelector('#exotic-fruits')) ||
-                     (category === 'Frutas' && section.querySelector('#offer-products')) ||
-                     (category === 'Verduras' && section.querySelector('#exotic-vegetables'))) 
-                    ? 'block' : 'none';
-            });
+            // Mostrar/ocultar secciones de productos según la categoría seleccionada
+            const showFruits = (category === 'Frutas' || category === 'all');
+            const showVegetables = (category === 'Verduras' || category === 'all');
+            
+            // Sección de frutas exóticas
+            document.getElementById('exotic-fruits-section').style.display = showFruits ? 'block' : 'none';
+            document.getElementById('exotic-fruits').style.display = showFruits ? 'grid' : 'none';
+            
+            // Sección de verduras exóticas
+            document.getElementById('exotic-vegetables-section').style.display = showVegetables ? 'block' : 'none';
+            document.getElementById('exotic-vegetables').style.display = showVegetables ? 'grid' : 'none';
+            
+            // Sección de ofertas (solo frutas)
+            document.getElementById('offer-products-section').style.display = showFruits ? 'block' : 'none';
+            document.getElementById('offer-products').style.display = showFruits ? 'grid' : 'none';
+            
+            // Mostrar/ocultar los divisores según corresponda
+            document.getElementById('divider-1').style.display = 
+                (showFruits && showVegetables) ? 'block' : 'none';
+            document.getElementById('divider-2').style.display = 
+                ((showFruits || showVegetables) && showFruits) ? 'block' : 'none';
         }
 
         function showAllCategories() {
