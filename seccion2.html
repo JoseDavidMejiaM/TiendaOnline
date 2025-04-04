@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Online - Frutas Exóticas</title>
+    <title>Catálogo Completo | Tienda Esmeralda</title>
     <link rel="stylesheet" href="Styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="min-h-screen">
     <!-- Encabezado -->
     <header class="bg-green-800 text-white p-4 flex justify-between items-center shadow-md">
         <div class="flex items-center space-x-3">
@@ -16,13 +16,11 @@
         </div>
         
         <div class="flex items-center space-x-4">
-            <!-- Selector de unidad -->
             <select id="unit-selector" class="bg-white text-black px-2 py-1 rounded" onchange="updateUnit()">
                 <option value="kg">Kilos</option>
                 <option value="lb">Libras</option>
             </select>
 
-            <!-- Carrito -->
             <div class="relative flex items-center space-x-2">
                 <button onclick="window.location.href='seccion3.html'" class="text-2xl">🛒</button>
                 <span id="cart-counter" class="bg-red-500 text-white text-sm font-bold rounded-full px-2 py-1">0 kg</span>
@@ -31,34 +29,63 @@
     </header>
 
     <div class="flex">
-        <div class="flex">
-            <!-- Barra lateral -->
-            <aside class="sidebar">
-                <h2 class="sidebar-title">Menú Principal</h2>
-                <button onclick="window.location.href='index.html'" class="sidebar-button">
-                    <i>🏠</i> Inicio
-                </button>
-                <button onclick="window.location.href='seccion2.html'" class="sidebar-button">
-                    <i>🛍️</i> Catálogo
-                </button>
-                </button>
-                <button onclick="window.location.href='seccion4.html'" class="sidebar-button">
-                    <i>📞</i> Contacto
-                </button>
-            </aside>
-            
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+            <h2 class="sidebar-title">Menú Principal</h2>
+            <button onclick="window.location.href='index.html'" class="sidebar-button">
+                <i>🏠</i> Inicio
+            </button>
+            <button onclick="window.location.href='seccion2.html'" class="sidebar-button">
+                <i>🛍️</i> Catálogo
+            </button>
+            <button onclick="window.location.href='seccion4.html'" class="sidebar-button">
+                <i>📞</i> Contacto
+            </button>
+        </aside>
 
+        <!-- Contenido principal -->
         <main class="w-4/5 p-4 m-4 content-overlay">
-            <h2 class="text-2xl font-bold text-green-800 mb-4">🍍 Frutas Exóticas</h2>
-            <p class="text-gray-700 mb-4">Descubre nuestra selección de frutas tropicales únicas y deliciosas.</p>
-            <div class="grid grid-cols-4 gap-4" id="exotic-products"></div>
+            <!-- Sección de bienvenida -->
+            <section class="p-6 rounded mb-6 text-center">
+                <h2 class="text-3xl font-bold text-green-800">Nuestro Catálogo Completo</h2>
+                <p class="text-gray-700 mt-2">
+                    En <strong>Tienda Esmeralda</strong> encontrarás las frutas y verduras más exóticas y frescas, cultivadas con amor y respeto por la naturaleza.
+                </p>
+            </section>
+            
+            <!-- Filtros -->
+            <div class="flex space-x-4 mb-6">
+                <button onclick="showAllCategories()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Mostrar Todo</button>
+                <button onclick="showCategory('Frutas')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Solo Frutas</button>
+                <button onclick="showCategory('Verduras')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Solo Verduras</button>
+            </div>
 
-            <h2 class="text-2xl font-bold text-green-800 mt-8 mb-4">🔥 Ofertas Especiales</h2>
-            <p class="text-gray-700 mb-4">Aprovecha nuestros descuentos en productos seleccionados.</p>
-            <div class="grid grid-cols-4 gap-4" id="offer-products"></div>
+            <!-- Secciones de productos -->
+            <section class="mb-6">
+                <h2 class="text-2xl font-bold text-green-800 mb-4">🍍 Frutas Exóticas</h2>
+                <p class="text-gray-700 mb-3">Descubre nuestra selección premium de frutas tropicales importadas directamente de sus países de origen.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="exotic-fruits"></div>
+            </section>
+
+            <hr class="border-t-2 border-green-300 my-6">
+
+            <section class="mb-6">
+                <h2 class="text-2xl font-bold text-green-800 mb-4">🥬 Verduras Exóticas</h2>
+                <p class="text-gray-700 mb-3">Explora nuestras exclusivas variedades de verduras, cultivadas con métodos orgánicos y sostenibles.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="exotic-vegetables"></div>
+            </section>
+
+            <hr class="border-t-2 border-green-300 my-6">
+
+            <section class="mb-6">
+                <h2 class="text-2xl font-bold text-orange-600 mb-4">🔥 Ofertas Especiales</h2>
+                <p class="text-gray-700 mb-3">Aprovecha nuestros descuentos en productos seleccionados. ¡Ofertas por tiempo limitado!</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="offer-products"></div>
+            </section>
         </main>
     </div>
 
+    <!-- Modal -->
     <div id="product-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded shadow-lg max-w-md text-center relative">
             <button class="absolute top-2 right-2 text-gray-600 text-xl" onclick="closeModal()">✖</button>
@@ -69,61 +96,108 @@
     </div>
 
     <script>
+        // Productos existentes (mantenidos exactamente igual)
         const exoticProducts = [
-            { id: "14", name: "Pitahaya", pricePerKg: 15000, pricePerLb: Math.round(15000 / 2.20462), image: "imagenes/pitahaya.jpg", description: "Fruta tropical dulce y jugosa." },
-            { id: "15", name: "Mangostino", pricePerKg: 18000, pricePerLb: Math.round(18000 / 2.20462), image: "imagenes/mangostino.jpg", description: "Conocida como la reina de las frutas." },
-            { id: "16", name: "Rambután", pricePerKg: 16000, pricePerLb: Math.round(16000 / 2.20462), image: "imagenes/rambutan.jpg", description: "Similar al lichi, con un sabor dulce." },
-            { id: "17", name: "Maracuyá", pricePerKg: 10000, pricePerLb: Math.round(10000 / 2.20462), image: "imagenes/maracuya.jpg", description: "Fruta con un sabor ácido y refrescante." },
-            { id: "18", name: "Noni", pricePerKg: 20000, pricePerLb: Math.round(20000 / 2.20462), image: "imagenes/noni.jpg", description: "Fruta con propiedades medicinales y alto contenido antioxidante." },
-            { id: "19", name: "Guayusa", pricePerKg: 12000, pricePerLb: Math.round(12000 / 2.20462), image: "imagenes/guayusa.jpg", description: "Hoja amazónica con efectos energizantes, ideal para infusiones." },
-            { id: "20", name: "Açai", pricePerKg: 22000, pricePerLb: Math.round(22000 / 2.20462), image: "imagenes/acai.jpg", description: "Superfruta rica en antioxidantes, popular en batidos y bowls saludables." },
-            { id: "21", name: "Lulo", pricePerKg: 9000, pricePerLb: Math.round(9000 / 2.20462), image: "imagenes/lulo.jpg", description: "Fruta cítrica y refrescante, perfecta para jugos naturales." },
+            { id: "14", name: "Pitahaya", categoria: "Frutas", pricePerKg: 15000, pricePerLb: Math.round(15000 / 2.20462), image: "imagenes/pitahaya.jpg", description: "Fruta tropical dulce y jugosa, rica en antioxidantes y vitamina C." },
+            { id: "15", name: "Mangostino", categoria: "Frutas", pricePerKg: 18000, pricePerLb: Math.round(18000 / 2.20462), image: "imagenes/mangostino.jpg", description: "Conocida como la reina de las frutas, con propiedades antiinflamatorias." },
+            { id: "16", name: "Rambután", categoria: "Frutas", pricePerKg: 16000, pricePerLb: Math.round(16000 / 2.20462), image: "imagenes/rambutan.jpg", description: "Similar al lichi, con un sabor dulce y textura jugosa." },
+            { id: "17", name: "Maracuyá", categoria: "Frutas", pricePerKg: 10000, pricePerLb: Math.round(10000 / 2.20462), image: "imagenes/maracuya.jpg", description: "Fruta con un sabor ácido y refrescante, ideal para jugos." },
+            { id: "18", name: "Noni", categoria: "Frutas", pricePerKg: 20000, pricePerLb: Math.round(20000 / 2.20462), image: "imagenes/noni.jpg", description: "Fruta con propiedades medicinales y alto contenido antioxidante." },
+            { id: "19", name: "Guayusa", categoria: "Frutas", pricePerKg: 12000, pricePerLb: Math.round(12000 / 2.20462), image: "imagenes/guayusa.jpg", description: "Hoja amazónica con efectos energizantes, ideal para infusiones." },
+            { id: "20", name: "Açai", categoria: "Frutas", pricePerKg: 22000, pricePerLb: Math.round(22000 / 2.20462), image: "imagenes/acai.jpg", description: "Superfruta rica en antioxidantes, popular en batidos y bowls saludables." },
+            { id: "21", name: "Lulo", categoria: "Frutas", pricePerKg: 9000, pricePerLb: Math.round(9000 / 2.20462), image: "imagenes/lulo.jpg", description: "Fruta cítrica y refrescante, perfecta para jugos naturales." }
+        ];
+        
+       // Ofertas
+       const offerProducts = [
+            { id: "22", name: "Aguacate Hass", categoria: "Frutas", pricePerKg: 12000, pricePerLb: Math.round(12000 / 2.20462), image: "imagenes/aguacate.jpg", discount: "10%", description: "Rico en grasas saludables y vitamina E. Perfecto para ensaladas y guacamole." },
+            { id: "23", name: "Papaya", categoria: "Frutas", pricePerKg: 8000, pricePerLb: Math.round(8000 / 2.20462), image: "imagenes/papaya.jpg", discount: "15%", description: "Dulce y excelente para la digestión. Alta en enzimas digestivas y vitamina C." },
+            { id: "24", name: "Sandía", categoria: "Frutas", pricePerKg: 7000, pricePerLb: Math.round(7000 / 2.20462), image: "imagenes/sandia.jpg", discount: "20%", description: "Refrescante y jugosa en días calurosos. Contiene licopeno y es baja en calorías." },
+            { id: "25", name: "Mora orgánica", categoria: "Frutas", pricePerKg: 6000, pricePerLb: Math.round(6000 / 2.20462), image: "imagenes/mora.jpg", discount: "12%", description: "Fruta rica en antioxidantes y fibra. Cultivada sin pesticidas ni químicos." }
+        ];
+        // Nuevas verduras exóticas
+        const exoticVegetables = [
+            { id: "26", name: "Col rizada (Kale)", categoria: "Verduras", pricePerKg: 8500, pricePerLb: Math.round(8500 / 2.20462), image: "imagenes/kale.jpg", description: "Superalimento verde con alto contenido de vitaminas A, K y C. Ideal para ensaladas y jugos detox." },
+            { id: "27", name: "Brócoli romanesco", categoria: "Verduras", pricePerKg: 9500, pricePerLb: Math.round(9500 / 2.20462), image: "imagenes/romanesco.jpg", description: "Variedad de brócoli con forma fractal, rica en vitamina C y fibra. Textura delicada y sabor suave." },
+            { id: "28", name: "Colinabo", categoria: "Verduras", pricePerKg: 7000, pricePerLb: Math.round(7000 / 2.20462), image: "imagenes/colinabo.jpg", description: "Tubérculo crujiente con sabor entre nabo y repollo. Excelente fuente de potasio y vitamina B6." },
+            { id: "29", name: "Acelga arcoíris", categoria: "Verduras", pricePerKg: 8000, pricePerLb: Math.round(8000 / 2.20462), image: "imagenes/acelga-arcoiris.jpg", description: "Variedad colorida de acelga con tallos en tonos rojos, amarillos y naranjas. Alta en hierro y magnesio." },
+            { id: "30", name: "Hinojo", categoria: "Verduras", pricePerKg: 7500, pricePerLb: Math.round(7500 / 2.20462), image: "imagenes/hinojo.jpg", description: "Vegetal aromático con propiedades digestivas. Bulbo crujiente con sabor anisado. Rico en vitamina C." },
+            { id: "31", name: "Pak choi (Bok choy)", categoria: "Verduras", pricePerKg: 8800, pricePerLb: Math.round(8800 / 2.20462), image: "imagenes/pakchoi.jpg", description: "Col china de tallos blancos y hojas verde oscuro. Excelente fuente de calcio vegetal y vitamina A." },
+            { id: "32", name: "Amaranto (hojas)", categoria: "Verduras", pricePerKg: 6500, pricePerLb: Math.round(6500 / 2.20462), image: "imagenes/amaranto.jpg", description: "Hojas nutritivas con más hierro que las espinacas. Sabor terroso ideal para guisos y salteados." },
+            { id: "33", name: "Tupinambo", categoria: "Verduras", pricePerKg: 7800, pricePerLb: Math.round(7800 / 2.20462), image: "imagenes/tupinambo.jpg", description: "También llamado alcachofa de Jerusalén. Tubérculo prebiótico con sabor a nuez. Rico en hierro." },
+            { id: "34", name: "Rábano daikon", categoria: "Verduras", pricePerKg: 7200, pricePerLb: Math.round(7200 / 2.20462), image: "imagenes/daikon.jpg", description: "Rábano japonés gigante, suave y ligeramente picante. Digestivo y bajo en calorías." },
+            { id: "35", name: "Hojas de mostaza", categoria: "Verduras", pricePerKg: 6800, pricePerLb: Math.round(6800 / 2.20462), image: "imagenes/hojas-mostaza.jpg", description: "Hojas picantes ricas en vitamina K y antioxidantes. Ideal para salteados con ajo o ensaladas." }
         ];
 
-        const offerProducts = [
-            { id: "22", name: "Aguacate", pricePerKg: 12000, pricePerLb: Math.round(12000 / 2.20462), image: "imagenes/aguacate.jpg", discount: "10%", description: "Rico en grasas saludables." },
-            { id: "23", name: "Papaya", pricePerKg: 8000, pricePerLb: Math.round(8000 / 2.20462), image: "imagenes/papaya.jpg", discount: "15%", description: "Dulce y excelente para la digestión." },
-            { id: "24", name: "Sandía", pricePerKg: 7000, pricePerLb: Math.round(7000 / 2.20462), image: "imagenes/sandia.jpg", discount: "20%", description: "Refrescante y jugosa en días calurosos." },
-            { id: "25", name: "Mora", pricePerKg: 6000, pricePerLb: Math.round(6000 / 2.20462), image: "imagenes/mora.jpg", discount: "12%", description: "Fruta rica en antioxidantes y fibra." },
-        ];
-
+ 
 
         let cart = JSON.parse(localStorage.getItem("cart")) || {};
         let unit = localStorage.getItem("unit") || "kg";
-
 
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("unit-selector").value = unit;
             updateCartCounter();
             renderProducts();
+            showAllCategories();
         });
 
+        function showCategory(category) {
+            // Mostrar/ocultar secciones según la categoría seleccionada
+            document.getElementById('exotic-fruits').style.display = 
+                (category === 'Frutas' || category === 'all') ? 'grid' : 'none';
+            document.getElementById('exotic-vegetables').style.display = 
+                (category === 'Verduras' || category === 'all') ? 'grid' : 'none';
+            document.getElementById('offer-products').style.display = 
+                (category === 'Frutas' || category === 'all') ? 'grid' : 'none';
+            
+            // Mostrar los títulos de sección según corresponda
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 
+                    (category === 'all' || 
+                     (category === 'Frutas' && section.querySelector('#exotic-fruits')) ||
+                     (category === 'Frutas' && section.querySelector('#offer-products')) ||
+                     (category === 'Verduras' && section.querySelector('#exotic-vegetables'))) 
+                    ? 'block' : 'none';
+            });
+        }
+
+        function showAllCategories() {
+            showCategory('all');
+        }
+
         function renderProducts() {
-            document.getElementById("exotic-products").innerHTML = 
+            // Frutas exóticas
+            document.getElementById("exotic-fruits").innerHTML = 
                 exoticProducts.map(product => createProductHTML(product)).join("");
             
+            // Verduras exóticas
+            document.getElementById("exotic-vegetables").innerHTML = 
+                exoticVegetables.map(product => createProductHTML(product)).join("");
+            
+            // Ofertas
             document.getElementById("offer-products").innerHTML = 
                 offerProducts.map(product => createProductHTML(product, true)).join("");
         }
 
         function createProductHTML(product, isOffer = false) {
             const price = unit === "kg" ? product.pricePerKg : product.pricePerLb;
+            const unitLabel = unit === "kg" ? "kg" : "lb";
+            
             return `
-                <div class="product-card p-4 rounded flex flex-col items-center relative">
-                    ${isOffer ? `<span class='bg-yellow-500 text-white text-xs px-2 py-1 rounded-full absolute top-2 left-2'>${product.discount} de descuento</span>` : ''}
-                    <img src="${product.image}" alt="${product.name}" class="w-full h-32 object-cover cursor-pointer rounded-t-lg" onclick="showDescription('${product.id}')">
+                <div class="bg-white border border-green-200 p-4 rounded shadow-md flex flex-col items-center relative">
+                    ${isOffer ? `<span class='bg-yellow-500 text-white text-xs px-2 py-1 rounded-full absolute top-2 left-2'>${product.discount} OFF</span>` : ''}
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-32 object-cover cursor-pointer" onclick="showDescription('${product.id}')">
                     <p class="text-center mt-2 font-bold">${product.name}</p>
-                    <p class="text-center">$${price}/${unit}</p>
+                    <p class="text-center">$${price.toLocaleString()} / ${unitLabel}</p>
                     <div class="flex justify-center items-center mt-2">
-                        <button class="bg-orange-300 p-2 rounded" onclick="decrease('${product.id}')">-</button>
+                        <button class="bg-orange-300 p-2 rounded" onclick="event.stopPropagation(); decrease('${product.id}')">-</button>
                         <span id="count-${product.id}" class="mx-2">${cart[product.id] || 0}</span>
-                        <button class="bg-orange-300 p-2 rounded" onclick="increase('${product.id}')">+</button>
+                        <button class="bg-orange-300 p-2 rounded" onclick="event.stopPropagation(); increase('${product.id}')">+</button>
                     </div>
                 </div>
             `;
         }
 
-        // Funciones del carrito
         function increase(id) {
             cart[id] = (cart[id] || 0) + 0.5;
             updateStorage();
@@ -158,7 +232,8 @@
         }
 
         function showDescription(id) {
-            const product = [...exoticProducts, ...offerProducts].find(p => p.id === id);
+            const allProducts = [...exoticProducts, ...exoticVegetables, ...offerProducts];
+            const product = allProducts.find(p => p.id === id);
             if (product) {
                 document.getElementById("modal-title").innerText = product.name;
                 document.getElementById("modal-description").innerText = product.description;
